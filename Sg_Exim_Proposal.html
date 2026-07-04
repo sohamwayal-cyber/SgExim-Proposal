@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SgExim - Service Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+  :root {
+    --navy:    #0A0F2C;
+    --navy2:   #0d1240;
+    --indigo:  #4F46E5;
+    --indigo2: #6366F1;
+    --gold:    #F59E0B;
+    --gold2:   #FBBF24;
+    --white:   #FFFFFF;
+    --slate:   #94A3B8;
+    --slate2:  #CBD5E1;
+    --glass:   rgba(255,255,255,0.05);
+    --glass2:  rgba(255,255,255,0.09);
+    --border:  rgba(255,255,255,0.10);
+  }
+ 
+  html { scroll-behavior: smooth; }
+ 
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+ 
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--navy); }
+  ::-webkit-scrollbar-thumb { background: linear-gradient(var(--indigo), var(--gold)); border-radius: 10px; }
+ 
+  /* ── GLOBAL GRADIENT BG ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 10%, rgba(79,70,229,0.22) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 90%, rgba(245,158,11,0.14) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(99,102,241,0.08) 0%, transparent 70%),
+      linear-gradient(160deg, #0A0F2C 0%, #0d1240 35%, #13083a 65%, #0A1628 100%);
+  }
+ 
+  /* ── ANIMATED ORBS ── */
+  .orb-wrap { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(90px); opacity: 0.2;
+    animation: drift 14s ease-in-out infinite;
+  }
+  .orb1 { width: 550px; height: 550px; background: radial-gradient(circle, #4F46E5, #818CF8); top: -150px; left: -150px; animation-delay: 0s; }
+  .orb2 { width: 420px; height: 420px; background: radial-gradient(circle, #F59E0B, #FBBF24); bottom: 5%; right: -100px; animation-delay: 5s; }
+  .orb3 { width: 320px; height: 320px; background: radial-gradient(circle, #EC4899, #8B5CF6); top: 45%; left: 38%; animation-delay: 9s; }
+  .orb4 { width: 240px; height: 240px; background: radial-gradient(circle, #06B6D4, #4F46E5); top: 25%; right: 15%; animation-delay: 3s; }
+ 
+  @keyframes drift {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33%      { transform: translate(30px,-40px) scale(1.06); }
+    66%      { transform: translate(-20px, 25px) scale(0.96); }
+  }
+ 
+  /* ── WRAPPER ── */
+  .wrapper { position: relative; z-index: 1; }
+ 
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 52px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(10,15,44,0.75);
+    backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid var(--border);
+    transition: padding 0.4s ease;
+    animation: navIn 0.7s ease both;
+  }
+  nav.shrunk { padding: 12px 52px; }
+  @keyframes navIn { from { transform: translateY(-100%); opacity:0; } to { transform: translateY(0); opacity:1; } }
+ 
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .nav-logo span { color: var(--gold); }
+ 
+  .nav-links { display: flex; gap: 34px; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--slate);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -3px; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, var(--indigo), var(--gold));
+    transform: scaleX(0); transition: transform 0.3s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+ 
+  .nav-cta {
+    background: linear-gradient(135deg, var(--indigo), var(--indigo2));
+    color: var(--white); padding: 10px 26px; border-radius: 50px;
+    font-size: 13px; font-weight: 600; text-decoration: none;
+    box-shadow: 0 4px 20px rgba(79,70,229,0.45);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .nav-cta::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+    transform: translateX(-100%); transition: transform 0.5s;
+  }
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(79,70,229,0.65); }
+  .nav-cta:hover::after { transform: translateX(100%); }
+ 
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 130px 52px 90px;
+    text-align: center;
+    position: relative;
+  }
+  /* extra hero gradient wash */
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 0%, rgba(79,70,229,0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 30% at 80% 80%, rgba(245,158,11,0.10) 0%, transparent 60%);
+  }
+ 
+  .hero-inner { max-width: 840px; position: relative; }
+ 
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(79,70,229,0.12);
+    border: 1px solid rgba(79,70,229,0.35);
+    backdrop-filter: blur(12px);
+    padding: 8px 22px; border-radius: 50px;
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 36px;
+    animation: fadeUp 0.9s 0.2s both;
+  }
+  .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: blink 2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+ 
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(44px, 7.5vw, 86px);
+    font-weight: 900; line-height: 1.08; letter-spacing: -1px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.9s 0.35s both;
+  }
+  .grad-text {
+    background: linear-gradient(135deg, var(--indigo2) 0%, #818CF8 40%, var(--gold) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+ 
+  .hero-sub {
+    font-size: 17px; color: var(--slate); line-height: 1.75;
+    max-width: 600px; margin: 0 auto 52px;
+    animation: fadeUp 0.9s 0.5s both;
+  }
+ 
+  .hero-stats {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 52px;
+    animation: fadeUp 0.9s 0.65s both;
+  }
+  .stat-pill {
+    background: var(--glass2);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+    border-radius: 18px; padding: 22px 30px; min-width: 140px; text-align: center;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .stat-pill::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--indigo), var(--gold));
+    transform: scaleX(0); transition: transform 0.4s;
+  }
+  .stat-pill:hover { transform: translateY(-5px); border-color: rgba(99,102,241,0.4); box-shadow: 0 16px 48px rgba(79,70,229,0.2); }
+  .stat-pill:hover::before { transform: scaleX(1); }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 700; color: var(--gold); }
+  .stat-lbl { font-size: 11px; color: var(--slate); text-transform: uppercase; letter-spacing: 1.2px; margin-top: 4px; }
+ 
+  .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; animation: fadeUp 0.9s 0.8s both; }
+ 
+  .btn-pri {
+    background: linear-gradient(135deg, var(--indigo), var(--indigo2));
+    color: var(--white); padding: 16px 40px; border-radius: 50px;
+    font-size: 15px; font-weight: 600; text-decoration: none;
+    box-shadow: 0 8px 32px rgba(79,70,229,0.45);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .btn-pri::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+    transform: translateX(-100%); transition: transform 0.55s;
+  }
+  .btn-pri:hover { transform: translateY(-3px); box-shadow: 0 14px 44px rgba(79,70,229,0.65); }
+  .btn-pri:hover::after { transform: translateX(100%); }
+ 
+  .btn-sec {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--white); padding: 16px 40px; border-radius: 50px;
+    font-size: 15px; font-weight: 600; text-decoration: none;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.3s, background 0.3s, transform 0.3s;
+  }
+  .btn-sec:hover { border-color: var(--indigo); background: rgba(79,70,229,0.12); transform: translateY(-3px); }
+ 
+  @keyframes fadeUp { from{opacity:0;transform:translateY(32px);} to{opacity:1;transform:translateY(0);} }
+ 
+  /* ── SECTION BASE ── */
+  section { padding: 100px 52px; position: relative; }
+  .s-inner { max-width: 1120px; margin: 0 auto; }
+ 
+  /* per-section gradient washes */
+  .s-wash-left::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 50% 70% at 0% 50%, rgba(79,70,229,0.12) 0%, transparent 60%);
+  }
+  .s-wash-right::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 50% 70% at 100% 50%, rgba(245,158,11,0.10) 0%, transparent 60%);
+  }
+  .s-wash-center::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(99,102,241,0.10) 0%, transparent 65%);
+  }
+ 
+  .s-alt { background: rgba(13,18,64,0.55); }
+ 
+  .eyebrow {
+    display: block; font-size: 11px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase; color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .s-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 4vw, 50px); font-weight: 700; line-height: 1.18;
+    margin-bottom: 14px;
+  }
+  .s-sub { font-size: 16px; color: var(--slate); line-height: 1.75; max-width: 540px; }
+  .s-rule { width: 56px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--indigo), var(--gold)); margin: 16px 0 48px; }
+  .s-rule-c { margin: 16px auto 48px; }
+ 
+  /* ── REVEAL ── */
+  .rv { opacity: 0; transform: translateY(38px); transition: opacity 0.75s ease, transform 0.75s ease; }
+  .rv.in { opacity: 1; transform: translateY(0); }
+  .rv-l { opacity: 0; transform: translateX(-38px); transition: opacity 0.75s ease, transform 0.75s ease; }
+  .rv-l.in { opacity: 1; transform: translateX(0); }
+  .rv-r { opacity: 0; transform: translateX(38px); transition: opacity 0.75s ease, transform 0.75s ease; }
+  .rv-r.in { opacity: 1; transform: translateX(0); }
+ 
+  /* ── ABOUT ── */
+  .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
+ 
+  .about-body p { font-size: 15px; color: var(--slate2); line-height: 1.8; margin-bottom: 14px; }
+ 
+  .feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+  .feat-item {
+    background: var(--glass); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px;
+    display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .feat-item:hover { border-color: var(--indigo); transform: translateY(-2px); }
+  .feat-icon { font-size: 18px; }
+ 
+  .skills-box {
+    background: var(--glass); border: 1px solid var(--border);
+    border-radius: 22px; padding: 36px;
+    backdrop-filter: blur(14px);
+  }
+  .skill { margin-bottom: 18px; }
+  .skill:last-child { margin-bottom: 0; }
+  .skill-top { display: flex; justify-content: space-between; font-size: 12px; color: var(--slate); margin-bottom: 7px; font-weight: 500; }
+  .skill-track { height: 6px; background: rgba(255,255,255,0.07); border-radius: 10px; overflow: hidden; }
+  .skill-bar { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--indigo), var(--gold)); width: 0; transition: width 1.3s cubic-bezier(.4,0,.2,1); }
+ 
+  /* ── SERVICES ── */
+  .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .svc-card {
+    background: var(--glass); border: 1px solid var(--border);
+    border-radius: 22px; padding: 34px 26px;
+    transition: transform 0.35s, border-color 0.35s, box-shadow 0.35s;
+    position: relative; overflow: hidden;
+  }
+  .svc-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--indigo), var(--gold));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.4s;
+  }
+  .svc-card:hover::before { transform: scaleX(1); }
+  .svc-card:hover { transform: translateY(-9px); border-color: rgba(99,102,241,0.4); box-shadow: 0 24px 64px rgba(79,70,229,0.18); }
+  .svc-icon { font-size: 38px; margin-bottom: 18px; display: block; }
+  .svc-name { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; margin-bottom: 10px; }
+  .svc-desc { font-size: 13.5px; color: var(--slate); line-height: 1.7; margin-bottom: 18px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tag {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+    background: rgba(79,70,229,0.15); border: 1px solid rgba(99,102,241,0.35);
+    color: #A5B4FC; padding: 4px 13px; border-radius: 50px;
+  }
+ 
+  /* ── PROCESS ── */
+  .proc-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; position: relative; }
+  .proc-grid::before {
+    content: ''; position: absolute; top: 35px; left: 10%; right: 10%; height: 2px;
+    background: linear-gradient(90deg, var(--indigo), #818CF8, var(--gold));
+    z-index: 0;
+  }
+  .proc-step { text-align: center; position: relative; z-index: 1; }
+  .proc-num {
+    width: 70px; height: 70px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--indigo), var(--indigo2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700;
+    margin: 0 auto 18px;
+    box-shadow: 0 8px 28px rgba(79,70,229,0.45);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .proc-step:hover .proc-num { transform: scale(1.12) translateY(-4px); box-shadow: 0 14px 40px rgba(79,70,229,0.65); }
+  .proc-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .proc-desc { font-size: 13px; color: var(--slate); line-height: 1.6; }
+ 
+  /* ── PAYMENT ── */
+  .pay-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+  .pay-card {
+    background: var(--glass); border: 1px solid var(--border);
+    border-radius: 22px; padding: 38px 28px; text-align: center;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .pay-card::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(245,158,11,0.08) 0%, transparent 65%);
+  }
+  .pay-card:hover { transform: translateY(-7px); border-color: rgba(245,158,11,0.35); box-shadow: 0 20px 56px rgba(245,158,11,0.12); }
+  .pay-pct {
+    font-family: 'Playfair Display', serif; font-size: 64px; font-weight: 900;
+    background: linear-gradient(135deg, var(--indigo2), var(--gold));
+    line-height: 1; margin-bottom: 8px;
+  }
+  .pay-label { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .pay-desc { font-size: 13px; color: var(--slate); line-height: 1.65; }
+ 
+  /* ── WHY US ── */
+  .why-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .why-left .s-sub { max-width: 100%; }
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .why-card {
+    background: var(--glass); border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px 20px;
+    display: flex; align-items: flex-start; gap: 14px;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .why-card:hover { transform: translateX(6px); border-color: var(--indigo); }
+  .why-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+  .why-title { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+  .why-desc { font-size: 12.5px; color: var(--slate); line-height: 1.6; }
+ 
+  /* ── CTA / CONTACT ── */
+  .cta-wrap {
+    max-width: 780px; margin: 0 auto;
+    background: var(--glass); border: 1px solid var(--border);
+    border-radius: 32px; padding: 72px 60px;
+    backdrop-filter: blur(24px);
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .cta-wrap::before {
+    content: ''; position: absolute; top: -100px; right: -100px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(79,70,229,0.28), transparent);
+    pointer-events: none;
+  }
+  .cta-wrap::after {
+    content: ''; position: absolute; bottom: -100px; left: -100px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,158,11,0.18), transparent);
+    pointer-events: none;
+  }
+  .cta-title { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 48px); font-weight: 700; margin-bottom: 14px; position: relative; z-index: 1; }
+  .cta-sub { font-size: 16px; color: var(--slate); line-height: 1.75; margin-bottom: 44px; position: relative; z-index: 1; }
+ 
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 36px; position: relative; z-index: 1; }
+  .c-item {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    border-radius: 14px; padding: 18px 20px;
+    display: flex; align-items: center; gap: 14px; text-align: left;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .c-item:hover { border-color: var(--indigo); transform: translateY(-2px); }
+  .c-icon { font-size: 22px; flex-shrink: 0; }
+  .c-lbl { font-size: 10px; color: var(--slate); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 3px; }
+  .c-val { font-size: 14px; font-weight: 600; }
+ 
+  .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+ 
+  .valid-tag {
+    display: inline-block; margin-top: 22px;
+    background: rgba(245,158,11,0.10); border: 1px solid rgba(245,158,11,0.30);
+    color: var(--gold); font-size: 11px; font-weight: 700;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    padding: 8px 22px; border-radius: 50px; position: relative; z-index: 1;
+  }
+ 
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 52px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    background: rgba(10,15,44,0.6); backdrop-filter: blur(16px);
+    position: relative; z-index: 1;
+  }
+  .f-logo { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; }
+  .f-logo span { color: var(--gold); }
+  footer p { font-size: 12.5px; color: var(--slate); }
+ 
+  /* ── RESPONSIVE ── */
+  @media (max-width: 960px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 72px 24px; }
+    .hero { padding: 120px 24px 70px; }
+    .about-grid, .why-wrap { grid-template-columns: 1fr; gap: 40px; }
+    .svc-grid { grid-template-columns: 1fr; }
+    .proc-grid { grid-template-columns: 1fr 1fr; }
+    .proc-grid::before { display: none; }
+    .pay-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .cta-wrap { padding: 48px 28px; }
+    footer { flex-direction: column; text-align: center; }
+  }
+ 
+  @media (prefers-reduced-motion: reduce) {
+    .orb, .rv, .rv-l, .rv-r, * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+ 
+<div class="orb-wrap">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="orb orb4"></div>
+</div>
+ 
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">SgExim<span></span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#payment">Payment</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get Started →</a>
+</nav>
+ 
+<div class="wrapper">
+ 
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-badge"><div class="badge-dot"></div>Official Service Proposal</div>
+    <h1 class="hero-title">
+      Building Digital<br/>
+      <span class="grad-text">Experiences That Convert</span>
+    </h1>
+    <p class="hero-sub">We design and develop world-class websites, mobile apps, and digital products that help your business grow faster and stand out from the competition.</p>
+    <div class="hero-stats">
+      <div class="stat-pill"><div class="stat-num" data-target="1">0</div><div class="stat-lbl">Projects Done</div></div>
+      <div class="stat-pill"><div class="stat-num" data-target="1">0</div><div class="stat-lbl">Happy Clients</div></div>
+      <div class="stat-pill"><div class="stat-num" data-target="1">0</div><div class="stat-lbl">Core Services</div></div>
+      <div class="stat-pill"><div class="stat-num" data-target="100">0</div><div class="stat-lbl">% Commitment</div></div>
+    </div>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-pri">Start Your Project →</a>
+      <a href="#services" class="btn-sec">View Services</a>
+    </div>
+  </div>
+</section>
+ 
+<!-- ABOUT -->
+<section id="about" class="s-wash-left">
+  <div class="s-inner">
+    <div class="about-grid">
+      <div class="rv-l">
+        <span class="eyebrow">Who We Are</span>
+        <h2 class="s-title">Your Digital<br/>Growth Partner</h2>
+        <div class="s-rule"></div>
+        <div class="about-body">
+          <p>We are a focused IT services company delivering clean, high-performance digital solutions. Every project we take on is treated with full dedication — no shortcuts, no excuses.</p>
+          <p>Our team specialises in building products that look great and perform even better. We believe in transparent communication, on-time delivery, and real results that move your business forward.</p>
+        </div>
+        <div class="feat-grid">
+          <div class="feat-item"><span class="feat-icon">⚡</span> Fast Delivery</div>
+          <div class="feat-item"><span class="feat-icon">🎯</span> Goal Focused</div>
+          <div class="feat-item"><span class="feat-icon">💎</span> Premium Quality</div>
+          <div class="feat-item"><span class="feat-icon">🔒</span> 100% Transparent</div>
+        </div>
+      </div>
+      <div class="rv-r">
+        <div class="skills-box">
+          <div class="skill"><div class="skill-top"><span>Web Development</span><span>95%</span></div><div class="skill-track"><div class="skill-bar" data-w="95"></div></div></div>
+          <div class="skill"><div class="skill-top"><span>Mobile App Development</span><span>90%</span></div><div class="skill-track"><div class="skill-bar" data-w="90"></div></div></div>
+          <div class="skill"><div class="skill-top"><span>UI/UX Design</span><span>92%</span></div><div class="skill-track"><div class="skill-bar" data-w="92"></div></div></div>
+          <div class="skill"><div class="skill-top"><span>Android App</span><span>88%</span></div><div class="skill-track"><div class="skill-bar" data-w="88"></div></div></div>
+          <div class="skill"><div class="skill-top"><span>iOS App</span><span>85%</span></div><div class="skill-track"><div class="skill-bar" data-w="85"></div></div></div>
+          <div class="skill"><div class="skill-top"><span>Digital Support</span><span>98%</span></div><div class="skill-track"><div class="skill-bar" data-w="98"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- SERVICES -->
+<section id="services" class="s-alt s-wash-center">
+  <div class="s-inner">
+    <div class="rv" style="text-align:center;">
+      <span class="eyebrow">What We Offer</span>
+      <h2 class="s-title">Our Core Services</h2>
+      <div class="s-rule s-rule-c"></div>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card rv"><span class="svc-icon">🌐</span><div class="svc-name">Web Development</div><p class="svc-desc">Fast, responsive, and scalable websites built to convert visitors into customers. From landing pages to full e-commerce platforms.</p><div class="tags"><span class="tag">React</span><span class="tag">Next.js</span><span class="tag">WordPress</span></div></div>
+      <div class="svc-card rv"><span class="svc-icon">📱</span><div class="svc-name">App Development</div><p class="svc-desc">Cross-platform mobile apps built with Flutter for maximum performance on both Android and iOS from a single codebase.</p><div class="tags"><span class="tag">Flutter</span><span class="tag">Firebase</span><span class="tag">REST API</span></div></div>
+      <div class="svc-card rv"><span class="svc-icon">🎨</span><div class="svc-name">UI/UX Design</div><p class="svc-desc">Beautiful, intuitive interfaces designed in Figma. We create designs that users love and that drive real engagement and retention.</p><div class="tags"><span class="tag">Figma</span><span class="tag">Prototyping</span><span class="tag">Research</span></div></div>
+      <div class="svc-card rv"><span class="svc-icon">🤖</span><div class="svc-name">Android App</div><p class="svc-desc">Native Android applications with clean architecture, optimised for performance across all screen sizes and Android versions.</p><div class="tags"><span class="tag">Kotlin</span><span class="tag">Java</span><span class="tag">Play Store</span></div></div>
+      <div class="svc-card rv"><span class="svc-icon">🍎</span><div class="svc-name">iOS App</div><p class="svc-desc">Premium iOS apps for iPhone and iPad. Smooth, pixel-perfect experiences that meet Apple's high standards and get approved first time.</p><div class="tags"><span class="tag">Swift</span><span class="tag">SwiftUI</span><span class="tag">App Store</span></div></div>
+      <div class="svc-card rv"><span class="svc-icon">🛠️</span><div class="svc-name">Digital Support</div><p class="svc-desc">Monthly retainer-based support to keep your digital products running smoothly. Updates, bug fixes, and performance monitoring included.</p><div class="tags"><span class="tag">Maintenance</span><span class="tag">AMC</span><span class="tag">Monthly</span></div></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- PROCESS -->
+<section id="process" class="s-wash-right">
+  <div class="s-inner">
+    <div class="rv" style="text-align:center;">
+      <span class="eyebrow">How We Work</span>
+      <h2 class="s-title">Our Process</h2>
+      <div class="s-rule s-rule-c"></div>
+    </div>
+    <div class="proc-grid">
+      <div class="proc-step rv"><div class="proc-num">1</div><div class="proc-title">Discovery</div><p class="proc-desc">We understand your business goals, audience, and technical requirements in depth before writing a single line of code.</p></div>
+      <div class="proc-step rv"><div class="proc-num">2</div><div class="proc-title">Design</div><p class="proc-desc">High-fidelity prototypes in Figma presented for your approval. Development only starts after you love the design.</p></div>
+      <div class="proc-step rv"><div class="proc-num">3</div><div class="proc-title">Develop</div><p class="proc-desc">Clean, well-structured code with regular progress updates. No surprises — complete transparency at every stage.</p></div>
+      <div class="proc-step rv"><div class="proc-num">4</div><div class="proc-title">Deliver</div><p class="proc-desc">Full testing, QA, and deployment. Source code, credentials, and documentation handed over. Post-launch support included.</p></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- PAYMENT -->
+<section id="payment" class="s-alt s-wash-center">
+  <div class="s-inner">
+    <div class="rv" style="text-align:center;">
+      <span class="eyebrow">Payment Structure</span>
+      <h2 class="s-title">Fair & Simple Payment Terms</h2>
+      <div class="s-rule s-rule-c"></div>
+    </div>
+    <div class="pay-grid">
+      <div class="pay-card rv"><div class="pay-pct">40%</div><div class="pay-label">Advance Payment</div><p class="pay-desc">Paid before the project begins. Confirms your commitment and allows us to assign our full team to your project immediately.</p></div>
+      <div class="pay-card rv"><div class="pay-pct">30%</div><div class="pay-label">Milestone Payment</div><p class="pay-desc">Paid at the midpoint of development when design and core functionality are complete and presented for your review.</p></div>
+      <div class="pay-card rv"><div class="pay-pct">30%</div><div class="pay-label">Final Payment</div><p class="pay-desc">Paid on final delivery. Full source code, credentials and documentation are handed over only after this payment is received.</p></div>
+    </div>
+    <div class="rv" style="text-align:center; margin-top:32px;">
+      <p style="font-size:13.5px; color:var(--slate);">All payments via Bank Transfer or UPI &nbsp;•&nbsp; GST Invoice provided &nbsp;•&nbsp; Written contract signed before work begins</p>
+    </div>
+  </div>
+</section>
+ 
+<!-- WHY US -->
+<section id="why" class="s-wash-left">
+  <div class="s-inner">
+    <div class="why-wrap">
+      <div class="rv-l">
+        <span class="eyebrow">Why Choose Us</span>
+        <h2 class="s-title">We Do What We Say.<br/>Every Time.</h2>
+        <div class="s-rule"></div>
+        <p class="s-sub">In a market full of agencies that overpromise and underdeliver, we built our reputation on doing the exact opposite. Your business growth is the only metric we measure ourselves by.</p>
+      </div>
+      <div class="why-grid rv-r">
+        <div class="why-card"><span class="why-icon">⏱️</span><div><div class="why-title">On-Time Delivery</div><p class="why-desc">Deadlines are non-negotiable. We plan carefully and always deliver on schedule.</p></div></div>
+        <div class="why-card"><span class="why-icon">💬</span><div><div class="why-title">Clear Communication</div><p class="why-desc">Regular updates. No ghosting. You always know where your project stands.</p></div></div>
+        <div class="why-card"><span class="why-icon">✨</span><div><div class="why-title">Premium Quality</div><p class="why-desc">Every pixel and every line of code is held to the highest standard. Always.</p></div></div>
+        <div class="why-card"><span class="why-icon">🤝</span><div><div class="why-title">Post-Launch Support</div><p class="why-desc">We don't disappear after delivery. Your success after launch matters as much.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- CONTACT -->
+<section id="contact" class="s-alt s-wash-center">
+  <div class="s-inner">
+    <div class="cta-wrap rv">
+      <span class="eyebrow" style="display:block;text-align:center;margin-bottom:14px;">Get In Touch</span>
+      <h2 class="cta-title">Ready to Build<br/>Something Great?</h2>
+      <p class="cta-sub">Reply to this proposal and we will send the project agreement within 24 hours. Let us turn your idea into a product your customers love.</p>
+      <div class="contact-grid">
+        <div class="c-item"><span class="c-icon">📞</span><div><div class="c-lbl">Phone / WhatsApp</div><div class="c-val">+91 9272101503</div></div></div>
+        <div class="c-item"><span class="c-icon">✉️</span><div><div class="c-lbl">Email</div><div class="c-val">sgeximinfo@gmail.com</div></div></div>
+        <div class="c-item"><span class="c-icon">🌐</span><div><div class="c-lbl">Website</div><div class="c-val">www.sgexim.in</div></div></div>
+        <div class="c-item"><span class="c-icon">📍</span><div><div class="c-lbl">Location</div><div class="c-val">Pune, India</div></div></div>
+      </div>
+      <div class="cta-btns">
+        <a href="tel:+919272101503" class="btn-pri">📞 Call Now</a>
+        <a href="https://wa.me/919272101503" class="btn-sec">💬 WhatsApp Us</a>
+      </div>
+      <div class="valid-tag">⏳ This proposal is valid for 15 days</div>
+    </div>
+  </div>
+</section>
+ 
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">SgExim<span></span></div>
+  <p>© 2026 SgExim. All rights reserved.</p>
+  <p>Web &nbsp;•&nbsp; App &nbsp;•&nbsp; Design &nbsp;•&nbsp; Digital Support</p>
+</footer>
+ 
+</div>
+ 
+<script>
+  // NAV SHRINK
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('shrunk', window.scrollY > 60);
+  });
+ 
+  // SCROLL REVEAL
+  const revEls = document.querySelectorAll('.rv, .rv-l, .rv-r');
+  const revObs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('in'), i * 90);
+        revObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  revEls.forEach(el => revObs.observe(el));
+ 
+  // COUNTERS
+  function countUp(el, target) {
+    let v = 0;
+    const step = Math.max(1, Math.ceil(target / 80));
+    const t = setInterval(() => {
+      v = Math.min(v + step, target);
+      el.textContent = v + (target === 100 ? '' : '+');
+      if (v >= target) clearInterval(t);
+    }, 18);
+  }
+  const counters = document.querySelectorAll('.stat-num[data-target]');
+  const cntObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { countUp(e.target, +e.target.dataset.target); cntObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(el => cntObs.observe(el));
+ 
+  // SKILL BARS
+  const bars = document.querySelectorAll('.skill-bar[data-w]');
+  const barObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.style.width = e.target.dataset.w + '%'; barObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.3 });
+  bars.forEach(el => barObs.observe(el));
+</script>
+</body>
+</html>
+ 
